@@ -1,4 +1,4 @@
-menu "Board Support Package (EchoEar)"
+menu "Board Support Package (ESP-VoCat)"
 
     config BSP_ERROR_CHECK
         bool "Enable error check in BSP"

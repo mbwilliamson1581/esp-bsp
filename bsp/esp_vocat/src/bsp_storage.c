@@ -11,9 +11,9 @@
 #include "esp_spiffs.h"
 #include "esp_vfs_fat.h"
 
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 
-static const char *TAG = "EchoEar";
+static const char *TAG = "ESP-VoCat";
 static sdmmc_card_t *bsp_sdcard = NULL;    // Global uSD card handler
 
 esp_err_t bsp_spiffs_mount(void)

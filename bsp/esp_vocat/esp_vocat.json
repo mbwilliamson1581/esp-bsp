@@ -1,8 +1,8 @@
 {
-    "BSP_NAME": "EchoEar",
-    "BSP_URL": "https://github.com/espressif/esp-bsp/tree/master/bsp/echoear",
-    "BSP_HW_LINK": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/echoear/user_guide_v1.2.html",
-    "BSP_DESC_LONG": "EchoEar is an intelligent AI development kit. It is suitable for voice interaction products that require large model capabilities, such as toys, smart speakers, and smart central control systems. The device is equipped with a 1.85-inch QSPI circular touch screen, dual microphone array, and supports offline voice wake-up and sound source localization algorithms. Combined with the large model capabilities provided by OpenAI，Xiaozhi AI, Gemini, etc., EchoEar can achieve full-duplex voice interaction, multimodal recognition, and intelligent agent control, providing a solid foundation for developers to create complete edge-side AI application experiences.",
+    "BSP_NAME": "ESP-VoCat",
+    "BSP_URL": "https://github.com/espressif/esp-bsp/tree/master/bsp/esp_vocat",
+    "BSP_HW_LINK": "https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp-vocat/user_guide_v1.2.html",
+    "BSP_DESC_LONG": "ESP-VoCat is an intelligent AI development kit. It is suitable for voice interaction products that require large model capabilities, such as toys, smart speakers, and smart central control systems. The device is equipped with a 1.85-inch QSPI circular touch screen, dual microphone array, and supports offline voice wake-up and sound source localization algorithms. Combined with the large model capabilities provided by OpenAI，Xiaozhi AI, Gemini, etc., ESP-VoCat can achieve full-duplex voice interaction, multimodal recognition, and intelligent agent control, providing a solid foundation for developers to create complete edge-side AI application experiences.",
     "BSP_MCU": "esp32s3",
     "BSP_GEN_NOGLIB": "true",
     "BSP_FEATURES": [
@@ -149,11 +149,13 @@
                 "true"
             ],
             "BSP_BUTTON_NUM": "2",
+            "BSP_BUTTON_1_NAME": "",
             "BSP_BUTTON_1_TYPE": "TOUCH",
             "pins": {
                 "BSP_BUTTON_1_CH": "6",
                 "BSP_BUTTON_2_CH": "7"
             },
+            "BSP_BUTTON_2_NAME": "",
             "BSP_BUTTON_2_TYPE": "TOUCH"
         },
         {
@@ -164,6 +166,7 @@
             ],
             "BSP_LEDS_TYPE": "GPIO",
             "BSP_LEDS_NUM": "1",
+            "BSP_LED_1_NAME": "",
             "pins": {
                 "BSP_LED_1_IO": "GPIO_NUM_43"
             }
@@ -171,8 +174,8 @@
     ],
     "I2C_CNT": 2,
     "I2S_CNT": 2,
-    "BSP_VALID_NAME": "echoear",
-    "BSP_BOARDNAME": "BSP_BOARD_ECHOEAR",
+    "BSP_VALID_NAME": "esp_vocat",
+    "BSP_BOARDNAME": "BSP_BOARD_ESP_VOCAT",
     "BSP_CAPS": [
         {
             "name": "BSP_CAPS_DISPLAY",

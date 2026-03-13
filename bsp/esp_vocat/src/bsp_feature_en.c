@@ -8,7 +8,7 @@
 #include "esp_check.h"
 #include "driver/gpio.h"
 
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 
 /* Feature enable */
 esp_err_t bsp_feature_enable(bsp_feature_t feature, bool enable)

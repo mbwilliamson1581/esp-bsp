@@ -122,12 +122,12 @@ dependencies:
     matches:
       - if: $CONFIG{M5STACK_TAB5} == 1
 
-  echoear:
+  esp_vocat:
     version: "*"
     public: true
-    override_path: "../../bsp/echoear"
+    override_path: "../../bsp/esp_vocat"
     matches:
-      - if: $CONFIG{ECHOEAR} == 1
+      - if: $CONFIG{ESP_VOCAT} == 1
 
 examples:
   - path: ../../examples/display

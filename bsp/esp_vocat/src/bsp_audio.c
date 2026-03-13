@@ -8,9 +8,9 @@
 #include "esp_check.h"
 #include "bsp_err_check.h"
 #include "esp_codec_dev_defaults.h"
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 
-static const char *TAG = "EchoEar";
+static const char *TAG = "ESP-VoCat";
 
 /* Can be used for i2s_std_gpio_config_t and/or i2s_std_config_t initialization */
 #define BSP_I2S_GPIO_CFG       \

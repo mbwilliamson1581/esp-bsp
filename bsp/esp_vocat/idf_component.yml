@@ -1,7 +1,7 @@
 
 version: "1.0.0"
-description: Board Support Package (BSP) for EchoEar
-url: https://github.com/espressif/esp-bsp/tree/master/bsp/echoear
+description: Board Support Package (BSP) for ESP-VoCat
+url: https://github.com/espressif/esp-bsp/tree/master/bsp/esp_vocat
 
 targets:
   - esp32s3
@@ -37,4 +37,11 @@ dependencies:
   led_indicator:
     version: "^2"
     public:  true
+
+examples:
+- path: ../../examples/display
+- path: ../../examples/display_rotation
+- path: ../../examples/display_audio_photo
+- path: ../../examples/display_lvgl_demos
+- path: ../../examples/display_sdcard
   

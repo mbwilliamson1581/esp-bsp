@@ -5,7 +5,7 @@
  */
 
 #include "bsp_err_check.h"
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 
 /**
  * @brief I2C handle for BSP usage

@@ -12,9 +12,9 @@
 #include "iot_button.h"
 #include "button_gpio.h"
 
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 
-static const char *TAG = "EchoEar";
+static const char *TAG = "ESP-VoCat";
 
 static esp_err_t  bsp_touchpad_custom_deinit(button_driver_t *button_driver);
 static uint8_t bsp_touchpad_custom_get_key_value(button_driver_t *button_driver);

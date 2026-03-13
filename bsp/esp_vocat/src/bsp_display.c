@@ -19,9 +19,9 @@
 #include "bsp/display.h"
 #include "bsp/touch.h"
 
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 
-static const char *TAG = "EchoEar";
+static const char *TAG = "ESP-VoCat";
 #if (BSP_CONFIG_NO_GRAPHIC_LIB == 0)
 static lv_display_t *disp;
 #endif // (BSP_CONFIG_NO_GRAPHIC_LIB == 0)
