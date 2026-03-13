@@ -120,7 +120,7 @@ Each BSP defines an identifier macro in the form of `BSP_BOARD_*`.
 
 | Type | Name |
 | ---: | :--- |
-| define  | [**BSP\_BOARD\_ECHOEAR**](#define-bsp_board_echoear)  <br> |
+| define  | [**BSP\_BOARD\_ESP\_VOCAT**](#define-bsp_board_esp_vocat)  <br> |
 
 
 

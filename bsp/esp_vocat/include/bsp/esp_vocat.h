@@ -6,7 +6,7 @@
 
 /**
  * @file
- * @brief ESP BSP: EchoEar
+ * @brief ESP BSP: ESP-VoCat
  */
 
 #pragma once
@@ -37,7 +37,7 @@
  *  @brief BSP Board Name
  *  @{
  */
-#define BSP_BOARD_ECHOEAR
+#define BSP_BOARD_ESP_VOCAT
 /** @} */ // end of boardname
 
 /**************************************************************************************************

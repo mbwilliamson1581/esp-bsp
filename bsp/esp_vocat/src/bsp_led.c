@@ -10,7 +10,7 @@
 #include "led_indicator_ledc.h"
 #include "led_indicator_rgb.h"
 
-#include "bsp/echoear.h"
+#include "bsp/esp_vocat.h"
 extern blink_step_t const *bsp_led_blink_defaults_lists[];
 
 

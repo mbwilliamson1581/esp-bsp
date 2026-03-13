@@ -1,30 +1,30 @@
-# BSP: EchoEar
+# BSP: ESP-VoCat
 
-| [HW Reference](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/echoear/user_guide_v1.2.html) | [HOW TO USE API](API.md) | [EXAMPLES](#compatible-bsp-examples) | [![Component Registry](https://components.espressif.com/components/espressif/echoear/badge.svg)](https://components.espressif.com/components/espressif/echoear) | ![maintenance-status](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg) |
-| --- | --- |
+| [HW Reference](https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32s3/esp-vocat/user_guide_v1.2.html) | [HOW TO USE API](API.md) | [![Component Registry](https://components.espressif.com/components/espressif/esp_vocat/badge.svg)](https://components.espressif.com/components/espressif/esp_vocat) | ![maintenance-status](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg) |
+| --- | --- | --- | --- |
 
 ## Overview
 
 <table>
 <tr><td>
 
-EchoEar is an intelligent AI development kit. It is suitable for voice interaction products that require large model capabilities, such as toys, smart speakers, and smart central control systems. The device is equipped with a 1.85-inch QSPI circular touch screen, dual microphone array, and supports offline voice wake-up and sound source localization algorithms. Combined with the large model capabilities provided by OpenAI，Xiaozhi AI, Gemini, etc., EchoEar can achieve full-duplex voice interaction, multimodal recognition, and intelligent agent control, providing a solid foundation for developers to create complete edge-side AI application experiences.
+ESP-VoCat is an intelligent AI development kit. It is suitable for voice interaction products that require large model capabilities, such as toys, smart speakers, and smart central control systems. The device is equipped with a 1.85-inch QSPI circular touch screen, dual microphone array, and supports offline voice wake-up and sound source localization algorithms. Combined with the large model capabilities provided by OpenAI，Xiaozhi AI, Gemini, etc., ESP-VoCat can achieve full-duplex voice interaction, multimodal recognition, and intelligent agent control, providing a solid foundation for developers to create complete edge-side AI application experiences.
 
 </td><td width="200" valign="top">
-  <img src="doc/echoear.webp">
+  <img src="doc/esp_vocat.webp">
 </td></tr>
 </table>
 
 <table>
 <tr><td>
-  <img src="doc/echoear-black-front.png">
+  <img src="doc/espvocat-black-front.png">
 </td><td>
-  <img src="doc/echoear-micboard-front.png">
+  <img src="doc/espvocat-micboard-front.png">
 </td></tr>
 <tr><td>
-  <img src="doc/echoear-baseboard-front.png">
+  <img src="doc/espvocat-baseboard-front.png">
 </td><td>
-  <img src="doc/echoear-coreboard-front.png">
+  <img src="doc/espvocat-coreboard-front.png">
 </td></tr>
 </table>
 

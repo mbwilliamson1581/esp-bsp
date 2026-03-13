@@ -1,10 +1,10 @@
 # Set this to the include directory of your component
-INPUT = ./bsp/echoear/include
+INPUT = ./bsp/esp_vocat/include
 EXCLUDE_PATTERNS = */esp-bsp.h \
                    */config.h
 
 # Output goes into doxygen directory, which is added to gitignore
-OUTPUT_DIRECTORY = ./bsp/echoear/doxygen
+OUTPUT_DIRECTORY = ./bsp/esp_vocat/doxygen
 
 # Warning-related settings, it's recommended to keep them enabled
 WARN_IF_UNDOC_ENUM_VAL = NO
