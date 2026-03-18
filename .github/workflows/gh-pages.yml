@@ -36,7 +36,7 @@ jobs:
       - name: Action for building binaries and config.toml
         env:
           IDF_EXTRA_ACTIONS_PATH: "${{ github.workspace }}/examples"
-        uses: espressif/idf-examples-launchpad-ci-action@v1.0.3
+        uses: espressif/idf-examples-launchpad-ci-action@v1.0.4
         with:
           idf_version: ${{ matrix.idf_ver }}
           parallel_count: 5
