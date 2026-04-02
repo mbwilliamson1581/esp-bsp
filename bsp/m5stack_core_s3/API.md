@@ -243,13 +243,17 @@ bsp_spiffs_unmount();
 
 ### SD Card Initialization / Deinitialization
 
-The BSP offers a flexible API for working with SD cards. In addition to the default mount and unmount functions, you can also use a configuration structure or access preconfigured `host` and `slot` structures.
+The SD Card and LCD share an SPI bus.
+https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/sdspi_share.html
+The SD Card is mounted during the bsp_display_start() process and occurs during the bsp_display_mount() function if the SDCARD capability is set using BSP_CAPS_SDCARD macro. Do not use the the default mount API "bsp_sdcard_mount()"
+The BSP offers a flexible API for working with SD cards. File operations and unmount functions remain unchanged.
+You can also use a configuration structure or access preconfigured `host` and `slot` structures.
 
 Mount with Default Configuration
 
 ```
 /* Mount microSD card to the virtual file system */
-bsp_sdcard_mount();
+** Mounting occurs automatically during bsp_display_start() process **
 
 /* ... perform file operations ... */
 

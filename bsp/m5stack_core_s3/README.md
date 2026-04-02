@@ -4,6 +4,7 @@
 | --- | --- | --- | --- | -- |
 > [!WARNING]
 > The SD card is not working simultaneously with the LCD screen. We are working on a fix.
+> **** SD Card IS working in this fork ***
 
 ## Overview
 
