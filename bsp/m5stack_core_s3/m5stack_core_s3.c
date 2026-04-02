@@ -371,7 +371,8 @@ esp_err_t bsp_sdcard_unmount(void)
     bsp_sdcard = NULL;
 
     //TODO: Check if LCD initialized (when LCD deinit will be covered by BSP)
-    if (spi_initialized) {
+    // Only free SPI when *disp and *bsp_sdcard are NULL
+    if ((spi_initialized) && (disp == NULL) && (bsp_sdcard == NULL)) {
         ret |= spi_bus_free(BSP_SDSPI_HOST);
         spi_initialized = false;
     }
