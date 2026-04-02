@@ -59,6 +59,12 @@ static i2c_master_dev_handle_t axp2101_h = NULL;
 static i2c_master_dev_handle_t aw9523_h = NULL;
 static bool spi_initialized = false;
 
+#define AW9523_REG_INPUT0     0x00  ///< Register for reading input values
+#define AW9523_REG_OUTPUT0    0x02  ///< Register for writing output values
+#define AW9523_REG_CONFIG0    0x04  ///< Register for configuring direction
+#define AW9523_REG_INTENABLE0 0x06  ///< Register for enabling interrupt
+#define AW9523_REG_GCR        0x11  ///< Register for general configuration
+
 esp_err_t bsp_i2c_init(void)
 {
     /* I2C was initialized before */
@@ -66,11 +72,14 @@ esp_err_t bsp_i2c_init(void)
         return ESP_OK;
     }
 
+    // Schematic p3 shows I2C_SYS_SDA & I2C_SYS_SCL connectec via R20 2.2k & R22 2.2k to VDD_3V3
+    // Add .flags.enable_internal_pullup to negate Warning 1617: i2c.master: Please check pull-up resistances whether be connected properly....
     const i2c_master_bus_config_t i2c_config = {
         .i2c_port = BSP_I2C_NUM,
         .sda_io_num = BSP_I2C_SDA,
         .scl_io_num = BSP_I2C_SCL,
         .clk_source = I2C_CLK_SRC_DEFAULT,
+        .flags.enable_internal_pullup = true,
     };
     BSP_ERROR_CHECK_RETURN_ERR(i2c_new_master_bus(&i2c_config, &i2c_handle));
 
@@ -89,7 +98,37 @@ esp_err_t bsp_i2c_init(void)
     BSP_ERROR_CHECK_RETURN_ERR(i2c_master_bus_add_device(i2c_handle, &aw9523_config, &aw9523_h));
 
     i2c_initialized = true;
-    return ESP_OK;
+    
+    uint8_t data[2];
+    esp_err_t err = ESP_OK;
+    // MBMW Feature  
+    data[0] = AW9523_REG_CONFIG0; // 1 for input, 0 for output
+    data[1] = 0b00000000; // P0_3 = ES_INT, P0_4 = TF_SW
+    data[1] |= (BSP_CAPS_AUDIO) ? 0b00001000 : 0; // P0_3 = ES_INT
+    data[1] |= (BSP_CAPS_SDCARD)? 0b00010000 : 0; // P0_4 = TF_SW
+    err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
+
+    data[0] = AW9523_REG_CONFIG0 + 1; // 1 for input, 0 for output
+    data[1] = 0b00000000; // P1_2 = TOUCH_INT, P1_3 = AW_INT
+    data[1] |= (BSP_CAPS_TOUCH)? 0b00000100 : 0; // P1_2 = TOUCH_INT
+    data[1] |= (BSP_CAPS_AUDIO)? 0b00001000 : 0; // P1_3 = AW_INT
+    err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
+
+    data[0] = AW9523_REG_INTENABLE0; // 0 = Interrupt enabled, 1 = Interrupt disabled
+    data[1] = 0b11111111; // P0_3 = ES_INT
+    data[1] &= (BSP_CAPS_AUDIO) ? 0b11110111 : 255; // P0_3 = ES_INT
+    err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
+
+    data[0] = AW9523_REG_INTENABLE0 + 1 ; // 0 = Interrupt enabled, 1 = Interrupt disabled
+    data[1] = 0b11111111; // P1_2 = TOUCH_INT, P1_3 = AW_INT
+    // Do Not enable interrupts for TOUCH. esp_lcg_touch_ft5x06.c requires hard gpio for interrupt.
+    // If esp-idf featured io_expansion with enum gpio_num_t > GPIO_NUM_MAX 
+    // then custom 'overloads' could be implemented to support interrupt from io_expander
+    // ** data[1] &= (BSP_CAPS_TOUCH)? 0b11111011 : 255; // P1_2 = TOUCH_INT
+    data[1] &= (BSP_CAPS_AUDIO)? 0b11110111 : 255; // P1_3 = AW_INT
+    err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
+
+    return err;
 }
 
 esp_err_t bsp_i2c_deinit(void)
@@ -149,15 +188,15 @@ static esp_err_t bsp_enable_feature(bsp_feature_t feature)
     }
 
     /* AW9523 P0 is in push-pull mode */
-    data[0] = 0x11;
-    data[1] = 0x10;
+    data[0] = AW9523_REG_GCR;
+    data[1] = 0x10;  // Bit 4    1 = Push-pull, 0 = Open-drain
     err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
 
-    data[0] = 0x02;
+    data[0] = AW9523_REG_OUTPUT0;
     data[1] = aw9523_P0;
     err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
 
-    data[0] = 0x03;
+    data[0] = AW9523_REG_OUTPUT0 + 1;
     data[1] = aw9523_P1;
     err |= i2c_master_transmit(aw9523_h, data, sizeof(data), 1000);
 
@@ -303,11 +342,19 @@ esp_err_t bsp_sdcard_sdspi_mount(bsp_sdcard_cfg_t *cfg)
         cfg->slot.sdspi = &sdslot;
     }
 
-#if !CONFIG_FATFS_LONG_FILENAMES
+#if !(defined(CONFIG_FATFS_LONG_FILENAMES) || !defined(CONFIG_FATFS_LFN_NONE))
     ESP_LOGW(TAG, "Warning: Long filenames on SD card are disabled in menuconfig!");
 #endif
 
-    return esp_vfs_fat_sdspi_mount(BSP_SD_MOUNT_POINT, cfg->host, cfg->slot.sdspi, cfg->mount, &bsp_sdcard);
+    // MBMW SD & LCD Sharing SPI Bus 
+    // Ensure sdspi_mount is only called once 
+    if(bsp_sdcard == NULL) {
+        return esp_vfs_fat_sdspi_mount(BSP_SD_MOUNT_POINT, cfg->host, cfg->slot.sdspi, cfg->mount, &bsp_sdcard);
+    } else {
+        ESP_LOGW(TAG, "SD card already mounted!");
+        return ESP_OK;
+    }
+
 }
 
 esp_err_t bsp_sdcard_mount(void)
@@ -476,6 +523,17 @@ esp_err_t bsp_display_new(const bsp_display_config_t *config, esp_lcd_panel_hand
     ESP_GOTO_ON_ERROR(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)BSP_LCD_SPI_NUM, &io_config, ret_io), err, TAG,
                       "New panel IO failed");
 
+    // MBMW SD & LCD Sharing SPI Bus 
+    if(BSP_CAPS_SDCARD) {
+        esp_err_t sd_ret = bsp_sdcard_mount();
+            if(sd_ret != ESP_OK) {
+                ESP_LOGW(TAG, "Failed to mount SD during LCD initialization, error: %s", esp_err_to_name(sd_ret));
+            } else {
+                ESP_LOGI(TAG, "SD Card mounted successfully during LCD initialization");
+            }
+        
+    }
+
     ESP_LOGD(TAG, "Install LCD driver");
     const esp_lcd_panel_dev_config_t panel_config = {
         .reset_gpio_num = BSP_LCD_RST, // Shared with Touch reset
@@ -601,11 +659,17 @@ lv_display_t *bsp_display_start_with_config(const bsp_display_cfg_t *cfg)
     assert(cfg != NULL);
     BSP_ERROR_CHECK_RETURN_NULL(lvgl_port_init(&cfg->lvgl_port_cfg));
 
+    // MBMW SD & LCD Sharing SPI Bus. Ensure nothing is sent to the LCD by LVGL 
+    lvgl_port_stop();
+
     BSP_ERROR_CHECK_RETURN_NULL(bsp_display_brightness_init());
 
     BSP_NULL_CHECK(disp = bsp_display_lcd_init(cfg), NULL);
 
     BSP_NULL_CHECK(disp_indev = bsp_display_indev_init(disp), NULL);
+
+    // MBMW SD & LCD Sharing SPI Bus. Everything is set up, we can allow updates to the LCD
+    lvgl_port_resume();
 
     return disp;
 }
