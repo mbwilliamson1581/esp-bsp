@@ -359,6 +359,12 @@ esp_err_t bsp_sdcard_sdspi_mount(bsp_sdcard_cfg_t *cfg)
 
 esp_err_t bsp_sdcard_mount(void)
 {
+    ESP_LOGI(TAG, "bsp_sdcard_mount() Dummy function for m5stack_core_s3 API. SD Card and LCD share SPI bus. SD Card is initialized and mounted during LCD initialization.");
+    return ESP_OK;
+}
+
+static esp_err_t bsp_sdcard_mount_worker(void)
+{
     bsp_sdcard_cfg_t cfg = {0};
     return bsp_sdcard_sdspi_mount(&cfg);
 }
@@ -526,13 +532,12 @@ esp_err_t bsp_display_new(const bsp_display_config_t *config, esp_lcd_panel_hand
 
     // MBMW SD & LCD Sharing SPI Bus 
     if(BSP_CAPS_SDCARD) {
-        esp_err_t sd_ret = bsp_sdcard_mount();
+        esp_err_t sd_ret = bsp_sdcard_mount_worker();
             if(sd_ret != ESP_OK) {
                 ESP_LOGW(TAG, "Failed to mount SD during LCD initialization, error: %s", esp_err_to_name(sd_ret));
             } else {
                 ESP_LOGI(TAG, "SD Card mounted successfully during LCD initialization");
             }
-        
     }
 
     ESP_LOGD(TAG, "Install LCD driver");
